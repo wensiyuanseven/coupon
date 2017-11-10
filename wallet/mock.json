@@ -1,0 +1,105 @@
+{
+  "userDetail": {
+    "code": 0,
+    "msg": "ok",
+    "data": {
+      "userMoneyTotal": 5.2,
+      "timeShareRentDeposit": 0,
+      "longTermRentDeposit": 2150,
+      "timeShareRentDepositNote": "仅分时车辆需缴纳",
+      "longTermRentDepositNote": "仅长租车辆需缴纳"
+    }
+  },
+  "shareDepositDetail": {
+    "code": 0,
+    "msg": "ok",
+    "data": {
+      "timeShareRentDepositGlobal": 1999,
+      "timeShareRentCarDepositGlobal": "1500",
+      "timeShareRentViolationDepositGlobal": "499",
+      "timeShareRentDepositWaterLine": 499,
+      "timeShareRentDepositWaterLineRemark": "芝麻信用分≥650，减免1000元",
+      "timeShareRentDeposit": 599,
+      "overFlow": 1,
+      "overFlowSubAmount": 100,
+      "hasUnFinishRefund": false,
+      "unFinishRefundAmount": 200,
+      "zhimaText": "最高可减免1500元"
+    }
+  },
+  "getSesameConfig": {
+    "code": 0,
+    "msg": "ok",
+    "data": [{
+      "score": 650,
+      "amount": 999,
+      "freeAmount": 1000
+    }, {
+      "score": 720,
+      "amount": 499,
+      "freeAmount": 1500
+    }]
+  },
+  "getRentDepositDetail": {
+    "code": 0,
+    "msg": "ok",
+    "data": {
+      "longTermRentViolationDepositWaterLine": 2000,
+      "longTermRentViolationDeposit": 200,
+      "longTermRentCarDeposit": 100,
+      "overFlow": -1,
+      "overFlowSubAmount": 499,
+      "hasUnFinishViolationRefund": false,
+      "unFinishViolationRefundAmount": 0,
+      "hasUnFinishCarRefund": false,
+      "unFinishCarRefundAmount": 0
+    }
+  },
+  "submitOrder": {
+    "code": 0,
+    "msg": "ok",
+    "data": {
+      "requestMethod": "get",
+      "requestCharset": "UTF-8",
+      "requestUrl": "https://alipay.XXXXX.do",
+      "parameters": {
+        "inputCharset": "1",
+        "bgUrl": "http://XXX:9000/api/payment/notify/async/ZF2016050308000002.jhtml",
+        "version": "mobile1.0",
+        "language": "1",
+        "signType": "4",
+        "merchantAcctId": "1007877442501",
+        "payerIdType": "3",
+        "payerId": "RF860371000006",
+        "orderId": "ZF2016050308000002",
+        "orderAmount": "100",
+        "orderTime": "20160503040850",
+        "productName": "帐户充值",
+        "productDesc": "帐户充值",
+        "payType": "21",
+        "mobileGateway": "phone",
+        "signMsg": "bNPHHg5rikPiXVuQAlt1XHNsYT6j6vPb0aFjQOZykUZZ2SC9zDIjQYNAHLD1I/PjhUbssusF2jQL\r\n/G+HHAyQbyt8QMuX33EkPMO6ZQr/wGS3z7PQZx2joy/SjSVCdet0bKcwxoWcI9UGKCUsIa8ZFpzb\r\noUWLaHUD+9bm08dZIy0="
+      },
+      "parameterString": "..."
+    }
+  },
+  "canRefund": {
+    "code": -1,
+    "msg": "您有一笔进行中的订单，暂不可申请退款",
+    "data": {
+
+    },
+    "userMoneyType": "timeShareRentDeposit"
+  },
+  "getRefundReasons": {
+    "code": 0,
+    "msg": "您有一笔进行中的订单，暂不可申请退款",
+    "data": [{
+      "reason": "XXXX",
+      "reasonText": "附近没有合适网点，还车麻烦"
+    }, {
+      "reason": "other",
+      "reasonText": "其它"
+    }]
+  }
+}
