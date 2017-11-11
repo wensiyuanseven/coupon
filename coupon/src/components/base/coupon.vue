@@ -68,13 +68,15 @@ export default {
     // 处理金钱
     // todo这个地方需要改
     // money(value) {
-
+    //      //2.35
     //   let m = Number(value);
-    //   // if (isNaN(m)) {
-    //   //   throw "money must be a number";
-    //   // }
-    //   m = m.toFixed(2);
-    //   let n = Number(m.split(".")[1]);
+    //   // 判断是不是数字 如果不是数字 抛出异常
+    //   if (isNaN(m)) {
+    //     throw "money must be a number";
+    //   }
+    //   // 先加两个00
+    //   m = m.toFixed(2); // 被转换成了字符串
+    //   let n = Number(m.split(".")[1]);  //通过后面这个n判断 n=35
     //   if (n === 0) {
     //     return m.split(".")[0];
     //   } else if (n % 10 == 0) {
@@ -82,7 +84,7 @@ export default {
     //   } else {
     //     return m;
     //   }
-    // }
+    // },
    money(value) {
       return value.split('.')[0]
     }
