@@ -32,9 +32,6 @@ export default {
       couponType: 3
     };
   },
-   mounted () {
-    // document.body.style.background = "#F1F1F2"  
-  },
   methods: {},
   components: {
     coupon,

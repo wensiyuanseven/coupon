@@ -7,10 +7,9 @@
         <h2>余额</h2>
         <a href="#"
            @click.prevent.stop="routeTo('balance')"
-           class="card-link">
+           class="card-link has-arrow">
               <span>{{balance}}</span>
               <span class="card-link-money">元</span>
-              <span class="card-link-arrow"></span>
             </a>
       </div>
     </li>
@@ -21,10 +20,9 @@
         <p>{{shareNote}}</p>
         <a href="#"
            @click.prevent.stop="routeTo('depositShare')"
-           class="card-link">
+           class="card-link has-arrow">
               <span>{{shareDeposit}}&nbsp;元</span>
               <!-- <span>去交纳</span> -->
-              <span class="card-link-arrow"></span>
             </a>
       </div>
     </li>
@@ -35,10 +33,9 @@
         <p>{{rentNote}}</p>
         <a href="#"
            @click.prevent.stop="routeTo('depositRent')"
-           class="card-link">
+           class="card-link has-arrow">
               <span>{{rentDeposit}}&nbsp;元</span>
               <!-- <span>去交纳</span> -->
-              <span class="card-link-arrow"></span>
             </a>
       </div>
     </li>
@@ -102,9 +99,9 @@ export default {
 @import '~@/assets/sass/variables.scss';
 .wallet-index {
   width: 100%;
-  padding: 6vw 3vw;
+  padding: 5vw 3vw;
   li {
-    margin-bottom: 4vw;
+    margin-bottom: 5vw;
   }
   .card {
     display: flex;
@@ -113,7 +110,6 @@ export default {
     height: 34.5vw;
     padding-left: 5.8vw;
     overflow: hidden;
-    border-radius: 1vw;
     background-size: auto 100%;
     background-repeat: no-repeat;
     background-position: right;
@@ -142,17 +138,6 @@ export default {
       margin-top: 3vw;
       .card-link-money {
         margin-left: 1.6vw;
-      }
-      .card-link-arrow {
-        margin-left: 2vw;
-        width: 2.15vw;
-        height: 5.3vw;
-        display: inline-block;
-        background-image: url('~@/assets/img/wallet-arrow.png');
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        vertical-align: middle;
       }
     }
   }

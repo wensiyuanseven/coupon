@@ -67,7 +67,7 @@ export default {
           defaultBtn: '回到我的钱包',
           primaryBtn: '去用车',
           handleClickDefaultBtn: this.backToWallet,
-          handleClickPrimaryBtn: this.backToWallet
+          handleClickPrimaryBtn: this.backToHome
         }
       }
       return {

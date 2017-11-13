@@ -1,8 +1,6 @@
 const ERR_Ok = 0;
 import qs from "qs"; //参数序列化
-import {
-  MessageBox
-} from "mint-ui";
+import {MessageBox} from "mint-ui";
 // import md5 from 'js-md5';
 
 // 获取与原生通信的bridge
@@ -58,7 +56,7 @@ export const publicjs = {
   mounted() {
     // 如果不是生产环境 执行这段代码
     if (process.env.NODE_ENV !== 'production') {
-      this.params.uid = '87112'   //87164  87112  我 87107
+      this.params.uid = '87107' //87164  87112  我 87107
       this.request();
     }
     setTimeout(() => {
@@ -96,8 +94,7 @@ export const publicjs = {
     }, 20)
   },
   methods: {
-
-    // 屏幕没撑满会加载
+    // 屏幕没撑满加载
     loadMore() {
       this.request();
       // 禁止重复加载
@@ -121,7 +118,6 @@ export const publicjs = {
           if (res.data.errCode === ERR_Ok) {
             // 请求数据
             this.params.totalSize = res.data.data.total_list;
-          //  !res.data.data.list ? document.body.style.background = "#ffffff" : this.couponType !== 1 ?   document.body.style.background = "#F1F1F2" :  null
             this._genResult(res.data.data.list);
           } else {
             let errMsg = res.data.errMsg || "请求错误";
@@ -131,17 +127,14 @@ export const publicjs = {
         .catch(error => {
           console.log(error);
           this.$loading.close()
-          // MessageBox("提示", "服务器错误");
         })
         // 成功与错误
         .then(res => {
-          this.noData = true; //显示暂无数据
+          this.noData = true;
         });
     },
     // 处理数据
     _genResult(data) {
-      //背景
-      // !data.length ? document.body.style.background = "#ffffff" : this.couponType !== 1 ?   document.body.style.background = "#F1F1F2" :  null
       this.$loading.close();
       if (!this.isEmpty) {
         this.resultData = this.resultData.concat(data);
@@ -152,16 +145,13 @@ export const publicjs = {
       if (!this.resultData || this.params.pageSize * this.params.pageNo >= this.params.totalSize) {
         this.nocoupon = true;
         this.infiniteScrollDisabled = true;
-        // 屏幕没撑满 走这里 禁止一下(手动调用了一下) 
         this.showBottomLoading = false;
       } else {
-        //手动加载  因为infiniteScrollDisabled默认为true 程序在这之前不会触发
         this.showBottomLoading = true;
         this.infiniteScrollDisabled = false;
       }
       this.params.pageNo++;
-      // console.log(this.resultData)
-      this.$emit('get_data_length',this.resultData.length)
+      this.$emit('get_data_length', this.resultData.length)
     }
   }
 

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import wallet from '@/views/wallet'
 import pay from '@/views/pay/pay'
+import rechargeAgreement from '@/views/pay/children/recharge-agreement'
 
 import routerBalance from './children/routerBalance.js'
 import routerDepositShare from './children/routerDepositShare.js'
@@ -26,6 +27,13 @@ const router = new Router({
                 title: '支付'
             },
             component: pay
+        }, {
+            path: '/pay/agreement',
+            name: 'rechargeAgreement',
+            meta: {
+                title: '充值协议'
+            },
+            component: rechargeAgreement
         },
         ...routerBalance,
         ...routerDepositShare,
@@ -40,10 +48,8 @@ let pathStack = []
 router.beforeEach((to, from, next) => {
     if (pathStack.length && pathStack[pathStack.length - 1] == to.fullPath) {
         to.query.direction = 'back'
-        console.log('====back====')
         pathStack.pop()
         if (from.name == 'wallet') {
-            console.log('====home====')
             if (Vue.prototype.$bridge && Vue.prototype.$bridge.callHandler) {
                 Vue.prototype.$bridge.callHandler('backToHome')
                 next(false)
@@ -53,12 +59,6 @@ router.beforeEach((to, from, next) => {
         to.query.direction = 'forward'
         pathStack.push(from.fullPath)
     }
-    // if (from.name == 'wallet') {
-    //     if (Vue.prototype.$bridge && Vue.prototype.$bridge.callHandler) {
-    //         Vue.prototype.$bridge.callHandler('backToHome')
-    //     }
-    //     return
-    // }
     // let $toast = document.querySelector('.mint-toast')
     // $toast && $toast.remove()
     if (to.meta.title) {

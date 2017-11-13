@@ -1,13 +1,10 @@
-import {
-  fetch
-} from '../fetch.js'
-import api from '../api/' //导出所有api对象
+import {fetch} from '../fetch.js'
+import api from '../api/' //导入所有api对象
 // console.log(api)
 // post 调用
 let balance = function (userId) {
-  return fetch(api.GET_BALANCE, {
-    userId
-  }, 'post')
+  // 接口名字   参数
+  return fetch(api.GET_BALANCE, { userId }, 'post')
 }
 let recharge = function (uid, prepaidCardNumber, prepaidCardPassword) {
   return fetch(api.GET_RECHARGE, {

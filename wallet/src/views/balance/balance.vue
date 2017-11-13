@@ -40,10 +40,10 @@
 
 <script>
   import dataService from '@/service/';
-  import {
-    MessageBox
-  } from 'mint-ui';
-  const ERR_OK = 'ok';
+  // import {
+  //   MessageBox
+  // } from 'mint-ui';
+  // const ERR_OK = 'ok';
   //直接调用
   export default {
     data() {
@@ -58,19 +58,11 @@
       setTimeout(() => {
         this.$loading.open();
         dataService.balance(this.$store.getters.user.id).then(res => {
-          if (res.data.errMsg === ERR_OK) {
-            this.$loading.close();
-            this.totalArr.push(res.data.data);
-            this.userMoneyTotal = String(res.data.data.userMoneyTotal);
-            this.userMoney = String(res.data.data.userMoney.toFixed(2));
-            this.userMoneyPresentation = String(res.data.data.userMoneyPresentation.toFixed(2));
-          } else {
-            let errMsg = res.data.errMsg || '请求错误';
-            MessageBox('提示', errMsg);
-          }
-        }).catch(error => {
-          console.log(error)
-          // MessageBox('提示', '请求超时')
+          this.$loading.close();
+          this.totalArr.push(res.data.data);
+          this.userMoneyTotal = String(res.data.data.userMoneyTotal);
+          this.userMoney = String(res.data.data.userMoney.toFixed(2));
+          this.userMoneyPresentation = String(res.data.data.userMoneyPresentation.toFixed(2));
         });
       }, 20);
     },

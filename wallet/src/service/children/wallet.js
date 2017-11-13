@@ -126,7 +126,7 @@ let getRefundCondition = function(userId, amount, userMoneyType) {
  * @param  {String}  bankName      退款银行名字，如中国银行 可为空
  * @return {Promise}                
  */
-let applyForRefund = function(userId, amount, userMoneyType, isToBalance, refundsResonsStr, bankId = '', bankCardNumber = '', bankCardUsername = '') {
+let applyForRefund = function(userId, amount, userMoneyType, isToBalance, refundsResonsStr = '', bankId = '', bankCardNumber = '', bankCardUsername = '') {
   return fetch(api.APPLY_FOR_REFUND, {
     userId,
     amount,

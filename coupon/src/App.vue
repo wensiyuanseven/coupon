@@ -21,10 +21,8 @@
     </div>
     <!-- 输入框区块结束 -->
     <!-- 动态组件渲染的内容 -->
-    <div id="scroll-content"  :class="{'white':(currentActive!=='unUsed'&&!couponLength)||currentActive==='unUsed','gray':currentActive!=='unUsed'&&couponLength}">
-      <!-- <keep-alive> -->
+    <div id="scroll-content" :class="{'white':(currentActive!=='unUsed'&&!couponLength)||currentActive==='unUsed','gray':currentActive!=='unUsed'&&couponLength}">
       <component :is="currentView" ref="content" @get_data_length="getDataLength"></component>
-      <!-- </keep-alive> -->
     </div>
   </div>
 </template>
@@ -58,85 +56,18 @@
         inputCoupon: "", //:输入优惠券
         changstate: false, //输入兑换码改变状态
         getCoupon: true, //兑换区块显示与隐藏
-        couponLength:0
+        couponLength: 0
       };
     },
-    mounted() {
-      setTimeout(() => {
-        document.body.style.background = "#ffffff"
-        // 解决点击延迟
-        // FastClick.attach(document.body);
-        this.input_show_hide();
-      }, 20);
-    },
     methods: {
-      getDataLength(length){
-        this.couponLength=length;
+      getDataLength(length) {
+        this.couponLength = length;
       },
       // 绑定切换事件
       toggleTabs: function(tabText) {
         this.currentView = tabText; //当前组件
         this.currentActive = tabText; //切换样式
-       tabText === "unUsed" ?this.getCoupon = true : this.getCoupon = false;  
-      },
-      public_border() {
-        let tabControl = document.getElementById('tab-control')
-        if (this.$refs.content.$el.clientHeight < document.body.clientHeight - (getCoupon.clientHeight + tabControl.clientHeight)) {   return }
-        if (this.$refs.content.couponType !== 1) {  return   }
-      },
-      input_show_hide() {
-        let getCoupon = document.getElementById("getCoupon");
-        let scrollcontent = document.getElementById("scroll-content");
-        let couponblock = document.querySelectorAll('.coupon-block')
-        var startX, startY, moveEndX, moveEndY, X, Y,
-          startMoveTime = 0,
-          lastMoveTime = 0;
-        let last_scroll_position, new_scroll_position = 0;
-        scrollcontent.addEventListener("scroll", e => {
-          this.public_border()
-          // 滚动条的距离
-          last_scroll_position = scrollcontent.scrollTop; //10
-          if (new_scroll_position < last_scroll_position && last_scroll_position > getCoupon.clientHeight) {
-            // 隐藏
-            getCoupon.classList.remove("slideDown");
-            getCoupon.classList.add("slideUp");
-          } else if (new_scroll_position >= last_scroll_position && last_scroll_position <= getCoupon.clientHeight) {
-            getCoupon.classList.remove("slideUp");
-            getCoupon.classList.add("slideDown");
-            return
-          }
-          new_scroll_position = last_scroll_position; //10
-        });
-        scrollcontent.addEventListener("touchstart", e => {
-          if (this.$refs.content.couponType !== 1) {
-            return
-          }
-          startX = e.touches[0].pageX;
-          startY = e.touches[0].pageY;
-          startMoveTime = e.timeStamp || Data.now() //初始时间
-          console.log(startMoveTime + "：开始时间")
-        });
-        scrollcontent.addEventListener("touchmove", e => {
-          this.public_border()
-          moveEndX = e.changedTouches[0].pageX;
-          moveEndY = e.changedTouches[0].pageY;
-          X = moveEndX - startX;
-          Y = moveEndY - startY;
-          lastMoveTime = e.timeStamp || Data.now(); //最后时间
-          let moveSpeed = Math.abs(Y) / (lastMoveTime - startMoveTime);
-          console.log(moveSpeed + "：速度")
-          console.log(scrollcontent.scrollTop)
-          // 向下拉 触摸
-          if (Math.abs(Y) > Math.abs(X) && moveSpeed > 0.5 && Y > 0) {
-            getCoupon.classList.remove("slideUp");
-            getCoupon.classList.add("slideDown");
-          }
-          // up
-          else if (Math.abs(Y) > Math.abs(X) && moveSpeed > 0.5 && Y < 0) {
-            getCoupon.classList.remove("slideDown");
-            getCoupon.classList.add("slideUp");
-          }
-        });
+        tabText === "unUsed" ? this.getCoupon = true : this.getCoupon = false;
       },
       // 兑换优惠券
       getcoupon() {
@@ -237,8 +168,7 @@
         font-family: PingFangSC-Regular;
         white-space: nowrap;
         font-size: 4.2666vw;
-        color: #ffffff; // padding-bottom: 1.6vw;
-        // background: red;
+        color: #ffffff;
         span {
           &:first-child {
             padding-bottom: 1.6vw;
@@ -259,8 +189,7 @@
   .slideUp {
     transform: translateY(-100px);
     transition: transform 300ms cubic-bezier(0.22, 0.61, 0.36, 1);
-  }
-  // 输入框容器
+  } // 输入框容器
   .get-coupon {
     overflow: hidden;
     position: fixed;
@@ -309,10 +238,10 @@
   .flesh {
     color: #d6d6d6;
   }
-  .white{
-    background:#ffffff;
+  .white {
+    background: #ffffff;
   }
-  .gray{
+  .gray {
     background: #F1F1F2;
   }
 </style>

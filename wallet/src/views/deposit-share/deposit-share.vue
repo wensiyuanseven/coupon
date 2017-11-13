@@ -1,14 +1,14 @@
 <template>
 <div class="deposit-share">
   <!-- <pre>{{payInfo}}</pre> -->
-  <div class="deposit-info shadow-box car-box">
+  <div class="deposit-info shadow-box card-box">
     <div class="deposit-info-content">
       <div class="should-pay">
-        <h2>保证金金额
+        <h2>应交保证金
           <small>仅分时车辆需交纳</small>
           <span class="right-money" v-if="!payInfo.discount">{{payInfo.totalMoney}}元</span>
         </h2>
-        <p>
+        <p class="invisible">
           <span class="car-deposit">车辆押金&nbsp;{{payInfo.carDeposit}}元</span>
           <span class="offence-deposit">违章押金&nbsp;{{payInfo.offenceDeposit}}元</span>
         </p>
@@ -24,7 +24,7 @@
         <p>{{payInfo.discountMethod}}</p>
       </div>
       <div class="current-balance">
-        <h2>当前余额
+        <h2>已交保证金
           <span>{{currentBalance}}元</span>
         </h2>
       </div>
@@ -35,24 +35,25 @@
   </div>
   <p class="refund-info"
      v-if="payInfo.hasRefund">您有一笔{{payInfo.refund}}元的退款，预计发起申请后1-3个工作日内原路退回到支付账户，详细进度请打开钱包-明细查看</p>
-  <div class="sesame-auth shadow-box car-box">
+  <div class="sesame-auth shadow-box card-box">
     <div>
       <h2>芝麻信用认证通道</h2>
       <small>{{payInfo.sesameText}}</small>
     </div>
     <a href="#"
-       @click.prevent.stop="$router.push({name: 'sesameCredit'})">去认证＞</a>
+       @click.prevent.stop="$router.push({name: 'sesameCredit'})"
+       class="has-arrow has-arrow--small"><span v-if="zhimaIsAuth">已授权</span><span v-else>去认证</span></a>
   </div>
   <mt-button type="primary"
              class="deposit-btn"
              @click="payDeposit"
              v-if="payInfo.overFlow==-1">
-    <span>交纳保证金 {{payInfo.shouldPayMoney}}元</span>
+    <span>交纳保证金 {{payInfo.overFlowMoney}}元</span>
   </mt-button>
   <mt-button type="primary"
              class="deposit-btn"
              @click="backToHome"
-             v-else>
+             v-else-if="loaded">
     <span>分时保证金已交纳，去用车吧</span>
   </mt-button>
   <div class="refund"
@@ -63,7 +64,8 @@
        v-if="payInfo.overFlow==1">退差额</a>
     <a href=""
        class="refund-all"
-       @click.prevent.stop="applyForRefund">申请退款</a>
+       @click.prevent.stop="applyForRefund"
+       v-if="loaded">申请退款</a>
   </div>
   <!-- <div class="deposit-explain">
     <h5>保证金说明：</h5>
@@ -96,6 +98,7 @@ export default {
 
   data() {
     return {
+      loaded: false,
       payInfo: {
         totalMoney: '-', // 应付总额
         carDeposit: '-', // 应付车辆押金
@@ -110,6 +113,7 @@ export default {
       },
       currentBalance: '-', // 当前余额
       sesameText: '-', // 芝麻认证通道文本
+      zhimaIsAuth: false, // 是否已经进行芝麻认证
       showRefundDiff: false,
       refundDiffMethod: [
         {
@@ -129,6 +133,7 @@ export default {
   methods: {
     loadData() {
       dataService.getShareDepositDetail(this.$store.getters.user.id).then(res => {
+        this.loaded = true
         let result = res.data
         let data = result.data
         this.payInfo.totalMoney = data.timeShareRentDepositGlobal
@@ -143,6 +148,7 @@ export default {
         this.payInfo.overFlowMoney = data.overFlowSubAmount
         this.payInfo.sesameText = data.zhimaText
         this.currentBalance = data.timeShareRentDeposit
+        this.zhimaIsAuth = data.zhimaIsAuth
       })
     },
     // 支付保证金
@@ -151,14 +157,14 @@ export default {
         name: 'pay',
         query: {
           type: 'share',
-          money: this.payInfo.shouldPayMoney
+          money: this.payInfo.overFlowMoney
         }
       })
     },
-    // 保证金已缴纳，去用车
+    // 保证金已交纳，去用车
     backToHome() {
-      if(this.$bridge){
-       this.$bridge.callHandler('backToHome')
+      if (this.$bridge) {
+        this.$bridge.callHandler('backToHome')
       }
     },
     // 点击退差额回调
@@ -187,8 +193,8 @@ export default {
     },
     // 申请退款
     applyForRefund() {
-      this.$message.confirm('退押金后你将无法使用分时车辆，确定申请退款吗？').then(() => {
-        dataService.canRefund(this.$store.getters.user.id, 'timeShareRentDeposit').then(res => {
+      dataService.canRefund(this.$store.getters.user.id, 'timeShareRentDeposit').then(res => {
+        this.$message.confirm('退押金后你将无法使用分时车辆，确定申请退款吗？').then(() => {
           this.$store.commit('applyForRefund', {
             money: this.currentBalance,
             type: 'share'
@@ -196,9 +202,14 @@ export default {
           this.$router.push({
             name: 'refundReason'
           })
-        }).catch(e => {
         })
-      }).catch(() => {
+      }).catch(e => {
+        if (e.errCode) {
+          setTimeout(() => {
+            document.querySelector('.mint-toast').remove()
+          }, 100)
+          this.$message.alert(e.errMsg)
+        }
       })
     }
   },
@@ -213,8 +224,8 @@ export default {
 @import '~@/assets/sass/variables.scss';
 .deposit-share {
   width: 100%;
-  padding: 3vw;
-  .shadow-box {
+  padding: 5vw 3vw;
+  .card-box {
     padding: 7vw 5vw;
     margin-bottom: 5vw;
   }
@@ -299,7 +310,7 @@ export default {
     }
   }
   .refund-info {
-    color: $color-gray-white;
+    color: $color-gray-light;
     margin-bottom: 8vw;
     padding: 0 3vw;
     line-height: 4vw;

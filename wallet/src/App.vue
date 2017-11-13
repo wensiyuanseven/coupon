@@ -129,16 +129,16 @@ input::-webkit-input-placeholder {
 
 .shadow-box {
   box-shadow: 0 0px 7px 4px rgba(217, 226, 233, 0.5);
-  background-color: #fff;
+  background-color: $color-bg;
+  border-radius: 2.13333vw;
 }
 
 .router {
   position: absolute;
   width: 100%;
   height: 100%;
-  overflow: auto;
-  // background-color: #E9ECF3;
-  background-color: #fdfdfe;
+  overflow: auto; // background-color: #E9ECF3;
+  background-color: $color-bg;
   box-shadow: 0 0 3px #aaa;
   transition: all .2s ease-out;
 }
@@ -167,5 +167,27 @@ input::-webkit-input-placeholder {
   // opacity: 0;
   -webkit-transform: translate(-5%, 0);
   transform: translate(-5% 0);
+}
+
+.has-arrow {
+  &:after {
+    content: '';
+    margin-left: 2vw;
+    width: 2.15vw;
+    height: 5.3vw;
+    display: inline-block;
+    background-image: url('~@/assets/img/wallet-arrow.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    vertical-align: middle;
+    transform: translateY(-6%);
+  }
+  &.has-arrow--small:after {
+    width: 2vw;
+    height: 3vw;
+    margin-left: 1.5vw;
+  }
+  &.has-arrow--tiny:after {}
 }
 </style>

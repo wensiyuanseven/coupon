@@ -12,14 +12,6 @@
     props: {
       title: String
     },
-    mounted() {
-      setTimeout(() => {
-        // var screenwidth = document.body.clientWidth;
-        // var screenheight = document.body.clientHeight;
-        // this.$refs.content.style.height = `${screenheight}px`;
-        // this.$refs.content.style.width = `${screenwidth}px`;
-      }, 20);
-    },
     data() {
       return {
         visible: false,

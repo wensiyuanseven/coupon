@@ -71,6 +71,7 @@ export default {
   h2 {
     font-size: 3.7333vw;
     padding: 0 6vw;
+    line-height: 5vw;
   }
   .reasons {
     .mint-cell-wrapper {
@@ -99,6 +100,11 @@ export default {
       background-image: none;
       border: 1px solid $color-gray-light;
       border-radius: 4px;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+      outline: none;
+      -webkit-appearance: none;
     }
   }
   .next-step {

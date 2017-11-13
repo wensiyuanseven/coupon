@@ -6,13 +6,11 @@ let instance
 export default {
   // 指定默认值維空对象
   open(options = "加载中...",num=1) {
-    // new一个对象
     if (!instance) {
       instance = new Indicator({
         el: document.createElement('div')
       })
     }
-    // 第二次进 直接return
     if (instance.visible) return;
     instance.title = options;
 

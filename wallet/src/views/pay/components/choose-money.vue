@@ -125,6 +125,7 @@ export default {
         text-align: center;
         line-height: 16vw;
         background-color: #D8D8D8;
+        font-size: 4.266667vw;
       }
       .money {
         &.active {

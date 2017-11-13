@@ -1,24 +1,17 @@
 <template>
   <div id="coupon">
-    <div class="coupon-block" v-for="(item, index) in coupondata" :key="index" @touchend="changestatue(index)" :class="[bgimg,{bgshadow:index==currentbg}]">
-    <!-- <div class="coupon-block" v-for="(item, index) in coupondata" :key="index"  :class="[bgimg,{bgshadow:index==currentbg}]"> -->
-      
+    <div class="coupon-block" v-for="(item, index) in coupondata" :key="index"  :class="[bgimg]">
       <div class="coupon-money">
-        <!-- 优惠券 -->
         <div>
           <span :style="fontcolor" v-if="item.coupons_type==='1'" class="coupons-money">￥</span>
           <span :style="fontcolor" v-if="item.coupons_type==='1'">{{item.coupons_money| money }}</span>
           <span :style="fontcolor" v-else>{{item.coupons_discount/10+'折'}} </span>
         </div>
-        <!-- 折扣券 -->
-        <!-- 这的地方需要判断一下是否显示 -->
-        <!-- 没有这个字段就不显示 -->
         <span :style="fontcolor" class="coupons-use-money" >{{item.qualification}}</span>
       </div>
       <div class="coupon-rule">
         <span :style="fontcolor">{{item.coupons_name}}</span>
         <span :style="fontcolor" class="describe">{{item.coupons_detail}}</span>
-        <!--判断一下起始时间是否为空 为空不显示 -->
         <span :style="fontcolor" v-if="item.start_date">有效期：{{item.start_date+'至'+item.end_date}}</span>
       </div>
     </div>
@@ -59,43 +52,12 @@ export default {
   computed: {
     // 优惠券的背景
     bgimg() {
-
       return `bgimg-${this.coupontype}`;
- 
     }
   },
   filters: {
-    // 处理金钱
-    // todo这个地方需要改
-    // money(value) {
-    //      //2.35
-    //   let m = Number(value);
-    //   // 判断是不是数字 如果不是数字 抛出异常
-    //   if (isNaN(m)) {
-    //     throw "money must be a number";
-    //   }
-    //   // 先加两个00
-    //   m = m.toFixed(2); // 被转换成了字符串
-    //   let n = Number(m.split(".")[1]);  //通过后面这个n判断 n=35
-    //   if (n === 0) {
-    //     return m.split(".")[0];
-    //   } else if (n % 10 == 0) {
-    //     return m.substr(0, m.length - 1);
-    //   } else {
-    //     return m;
-    //   }
-    // },
    money(value) {
       return value.split('.')[0]
-    }
-  },
-  methods: {
-    // 派发事件
-    changestatue(index) {
-      // 如果类型为未使用的优惠券 让点击
-      if (this.coupontype == 1) {
-        this.currentbg = index;
-      }
     }
   }
 };
@@ -105,22 +67,14 @@ export default {
 // 未使用背景
 .bgimg-1 {
   background: url("./../../assets/img/bg-noshadow@2x.png"); 
-    // transform: translate3d(0, 0, 0);
 } 
-.bgshadow {
-  // backface-visibility: hidden;
-  filter: drop-shadow(0 0 1.33vw rgba(0, 0, 0, 0.5));
-  // transform:scale(1.1);
-  transform: translate3d(0, 0, 0);
-}
+
 // 已经使用 已经失效 背景
 .bgimg-2 {
   // 阴影问题
   background: url("./../../assets/img/bg-brace@2x.png");
-  // 这个属性不能乱用
     // transform: translate3d(0, 0, 0);
-} // 阴影
-
+}
 #coupon {
   height: 100%;
   padding: 0 2.666667vw 0 2.666667vw;
@@ -134,7 +88,6 @@ export default {
   background-size: 100% 100%;
   margin-bottom: 2.668vw;
   .coupon-money {
-    // 正好100vw
     width: 29vw;
     height: 21.344vw;
     display: flex;

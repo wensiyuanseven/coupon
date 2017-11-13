@@ -9,36 +9,39 @@
     <div class="deposit-item offence-deposit">
       <div class="deposit-item--name">
         <h2>违章押金</h2>
-        <a href="#"
-           v-if="payInfo.overflow == -1"
-           @click.prevent="goPay('offence')">去交纳<span>＞</span></a>
+        <small v-if="!loaded">读取中...</small>
         <small v-else-if="payInfo.hasOffenceRefund">退款中，预计发起申请后1-3个工作日内原路退回到支付账户</small>
-        <small v-else-if="Number(payInfo.offenceBalance)">已交纳</small>
-        <small v-else>读取中...</small>
+        <small v-else-if="payInfo.offenceDepositFree">已免押金，无需交纳</small>
+        <a href="#"
+           v-else-if="payInfo.overflow == -1"
+           @click.prevent="goPay('offence')"
+           class="has-arrow has-arrow--small">去交纳<span></span></a>
+        <small v-else-if="payInfo.overflow ==1 || payInfo.overflow == 0">已交纳</small>
       </div>
       <div class="deposit-item--balance">
         <span>{{payInfo.offenceBalance}}元</span>
         <a href="#"
            @click.prevent="applyForRefund('offence')"
-           v-if="payInfo.offenceBalance && !payInfo.hasOffenceRefund">申请退款</a>
+           v-if="payInfo.offenceBalance && !payInfo.hasOffenceRefund && loaded">申请退款</a>
       </div>
     </div>
     <!-- 车辆押金 -->
     <div class="deposit-item car-deposit">
       <div class="deposit-item--name">
         <h2>车辆押金</h2>
-        <small v-if="payInfo.hasCarRefund">退款中，预计发起申请后1-3个工作日内原路退回到支付账户</small>
+        <small v-if="!loaded">读取中...</small>
+        <small v-else-if="payInfo.hasCarRefund">退款中，预计发起申请后1-3个工作日内原路退回到支付账户</small>
+        <small v-else-if="payInfo.carDepositFree">已免押金，无需交纳</small>
         <a href="#"
            v-else-if="!isNaN(Number(payInfo.carBalance))"
-           @click.prevent="goPay('car')">去交纳<span>＞</span></a>
-        
-        <small v-else>读取中...</small>
+           @click.prevent="goPay('car')"
+           class="has-arrow has-arrow--small">去交纳<span></span></a>
       </div>
       <div class="deposit-item--balance">
         <span>{{payInfo.carBalance}}元</span>
         <a href="#"
            @click.prevent="applyForRefund('car')"
-           v-if="payInfo.carBalance && !payInfo.hasCarRefund">申请退款</a>
+           v-if="payInfo.carBalance && !payInfo.hasCarRefund && loaded">申请退款</a>
       </div>
     </div>
   </div>
@@ -58,6 +61,7 @@ export default {
 
   data() {
     return {
+      loaded: false,
       payInfo: {
         offenceDeposit: '', // 应交违章押金
         carDeposit: '', // 应交车辆押金
@@ -67,8 +71,10 @@ export default {
         carRefund: '', // 车辆押金退款金额
         offenceBalance: '-', // 违章押金余额
         carBalance: '-', // 车辆押金余额
-        overflow: '', // 是否需要交纳违章押金,overFlow=-1：需缴纳  overFlow=1:可差额退款 overFlow=0:相等
+        overflow: '', // 是否需要交纳违章押金,overFlow=-1：需交纳  overFlow=1:可差额退款 overFlow=0:相等
         overflowAmount: '', // 违章押金应交和实交差
+        offenceDepositFree: false, // 是否免违章押金
+        carDepositFree: false, // 是否免车辆押金
       }
     }
   },
@@ -94,9 +100,9 @@ export default {
       }
     },
     applyForRefund(type) {
-      this.$message.confirm('退押金后你将无法使用长租车辆<br>确定申请退款吗？', '提示').then(action => {
-        let refundType = type == 'offence' ? 'longTermRentViolationDeposit' : 'longTermRentCarDeposit'
-        dataService.canRefund(this.$store.getters.user.id, refundType).then(res => {
+      let refundType = type == 'offence' ? 'longTermRentViolationDeposit' : 'longTermRentCarDeposit'
+      dataService.canRefund(this.$store.getters.user.id, refundType).then(res => {
+        this.$message.confirm('退押金后你将无法使用长租车辆<br>确定申请退款吗？', '提示').then(action => {
           if (type === 'offence') {
             this.$store.commit('applyForRefund', {
               money: this.payInfo.offenceBalance,
@@ -111,15 +117,14 @@ export default {
           this.$router.push({
             name: 'refund'
           })
-        }).catch(e => {
-
         })
       }).catch(e => {
-        // this.$message.alert('2017-9-18 15:53 是您最近一次用车需还车3个工作日后，才可申请退款').then(action => {
-        //   this.$message.alert('您有一笔进行中的订单，暂不可申请退款').then(action => {
-
-        //   })
-        // })
+        if (e.errCode) {
+          setTimeout(() => {
+            document.querySelector('.mint-toast').remove()
+          }, 100)
+          this.$message.alert(e.errMsg)
+        }
       })
     }
   },
@@ -137,6 +142,9 @@ export default {
       this.payInfo.carBalance = data.longTermRentCarDeposit
       this.payInfo.overflow = data.overFlow
       this.payInfo.overflowAmount = data.overFlowSubAmount
+      this.payInfo.offenceDepositFree = data.isAvoidLongTermRentViolationDeposit
+      this.payInfo.carDepositFree = data.isAvoidLongTermRentCarDeposit
+      this.loaded = true
     })
   }
 }
@@ -149,10 +157,9 @@ export default {
   width: 100%;
   height: 100%;
   overflow: auto;
-  padding: 3vw;
+  padding: 5vw 3vw;
   .title-card {
     height: 38.7vw;
-    border-radius: 3vw;
     overflow: hidden;
     background-image: url('~@/assets/img/deposit-car.png');
     background-size: contain;

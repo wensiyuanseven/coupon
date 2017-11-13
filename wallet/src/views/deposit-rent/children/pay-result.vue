@@ -41,9 +41,7 @@ export default {
     backToHome() {
       try {
         if (this.$bridge) {
-          this.$bridge.callHandler('backToHome', {}, res => {
-            this.log(res)
-          })
+          this.$bridge.callHandler('backToHome')
         } else {
           this.$toast('no bridge')
         }
@@ -88,7 +86,7 @@ export default {
         }
         if (this.canUseCar == 0) {
           ret.text = '长租车辆，需同时交纳违章押金和车辆押金'
-          ret.defaultBtn = '去缴纳' + (this.depositType == 'car' ? '违章' : '车辆') + '押金'
+          ret.defaultBtn = '去交纳' + (this.depositType == 'car' ? '违章' : '车辆') + '押金'
           ret.handleClickDefaultBtn = this.payAnother
         } else {
           ret.text = ''

@@ -96,7 +96,7 @@ export default {
     display: flex;
     align-items: center;
     height: 14.14vw;
-    border-bottom: 0.27vw solid #e7e7e7;
+    border-bottom: 1px solid #e7e7e7;
     span {
       margin-left: 2.13vw;
       margin-right: 6.67vw;

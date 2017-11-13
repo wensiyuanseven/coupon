@@ -1,12 +1,18 @@
 <template>
 <div class="refund">
-  <div class="refund-money">
+  <div class="refund-money shadow-box">
     <p>申请退款金额</p>
     <img src="~@/assets/img/refund-money1.png"
          alt="">
     <span>{{refundMoney}}元</span>
-    <p>预计1-3工作日内原路退回到</p>
-    <p>您的支付宝微信等账户，请注意查收</p>
+    <template v-if="bankRefundAmount == 0">
+      <p>预计1-3工作日内原路退回到</p>
+      <p>您的支付宝微信等账户，请注意查收</p>
+    </template>
+    <template v-else>
+      <p>预计1-3个工作日内退回到您的账户，请注意查收</p>
+    </template>
+    
   </div>
   <!-- <pre>{{formData}}{{cardType}}</pre> -->
   <div class="refund-form"
@@ -63,8 +69,13 @@
       <img src="~@/assets/img/refund-money.png"
            alt="">
       <h2>提交退款申请成功</h2>
-      <p>预计1-3工作日内原路退回到</p>
-      <p>您的支付宝微信等账户，请注意查收</p>
+      <template v-if="bankRefundAmount == 0">
+        <p>预计1-3工作日内原路退回到</p>
+        <p>您的支付宝微信等账户，请注意查收</p>
+      </template>
+      <template v-else>
+        <p>预计1-3个工作日内退回到您的账户，请注意查收</p>
+      </template>
       <mt-button @click="$router.push({name: 'wallet'})"
                  type="primary">返回我的钱包</mt-button>
     </div>
@@ -154,6 +165,9 @@ export default {
     dataService.getRefundCondition(this.$store.getters.user.id, refundData.money, refundConfig.refundType[refundData.type]).then(res => {
       this.showBank = res.data.data.isShowBank
       this.bankList = res.data.data.banks
+      if(window.navigator.userAgent.match(/iphone|ipad/ig)){
+        this.bankList.unshift({bankId: 0, bankName: '-请选择-'})
+      }
       this.bankRefundAmount = res.data.data.bankRefundAmount
       this.onlineRefundAmount = res.data.data.onlineRefundAmount
     })
@@ -178,18 +192,17 @@ export default {
 
 </script>
 
-<style lang="scss" scoped="">
+<style lang="scss">
 @import '~@/assets/sass/variables.scss';
 .refund {
   width: 100%;
   height: 100%;
   overflow: auto;
-  padding: 8vw 3vw;
+  padding: 5vw 3vw;
   .refund-money {
     text-align: center;
-    padding-top: 1vw;
+    padding-top: 3vw;
     padding-bottom: 3vw;
-    box-shadow: 0 1.333vw 3.2vw rgba(217, 226, 233, 0.5);
     margin-bottom: 5vw;
     img {
       width: 26%;
@@ -233,6 +246,7 @@ export default {
         }
         .input-item {
           width: 60vw;
+          outline: none;
         }
       }
       select {
@@ -246,7 +260,7 @@ export default {
   }
   .refund-explain {
     p {
-      color: $color-gray-white;
+      color: $color-gray-light;
       line-height: 4.5vw;
     }
   }
@@ -259,7 +273,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #fff;
+    background-color: $color-bg;
     text-align: center;
     padding: 3vw;
     img {

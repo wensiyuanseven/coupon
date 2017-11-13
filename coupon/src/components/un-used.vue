@@ -22,41 +22,36 @@
   </div>
 </template>
 <script>
-  import coupon from "./base/coupon"; //优惠券组件
-  import noCoupon from "./base/no-coupon";
-  import noData from "./base/no-data"; //暂无数据
-  import {
-    publicjs
-  } from "./../mixin/mixin";
-  export default {
-    name: "UnUsed",
-    mixins: [publicjs],
-    data() {
-      return {
-        couponType: 1 //优惠券类型
-      };
-    },
-    methods: {
-      // 外部调用清空状态
-      clear_data() {
-        this.params.pageNo = 1;
-        this.isEmpty = true;
-      }
-    },
-    mounted() {
-      // document.body.style.background = "#ffffff"
-    },
-    components: {
-      coupon,
-      noCoupon,
-      noData
+import coupon from "./base/coupon"; //优惠券组件
+import noCoupon from "./base/no-coupon";
+import noData from "./base/no-data"; //暂无数据
+import { publicjs } from "./../mixin/mixin";
+export default {
+  name: "UnUsed",
+  mixins: [publicjs],
+  data() {
+    return {
+      couponType: 1 //优惠券类型
+    };
+  },
+  methods: {
+    // 外部调用清空状态
+    clear_data() {
+      this.params.pageNo = 1;
+      this.isEmpty = true;
     }
-  };
+  },
+  components: {
+    coupon,
+    noCoupon,
+    noData
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-  @import "./../assets/css/public-loading.scss";
-  #un-used {
-    margin-top: 33.3vw;
-  }
+@import "./../assets/css/public-loading.scss";
+#un-used {
+  margin-top: 33.3vw;
+}
 </style>

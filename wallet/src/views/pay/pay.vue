@@ -27,7 +27,7 @@
   <div class="pay-btn">
     <mt-button type="primary"
                @click="pay">立即充值</mt-button>
-    <p v-if="type=='balance'"><small>点击“立即充值”即代表您同意<router-link :to="{}">《一步用车充值协议》</router-link>，知悉充值金额不可退。</small></p>
+    <p v-if="type=='balance'"><small>点击“立即充值”即代表您已阅读并同意<router-link :to="{name: 'rechargeAgreement'}">《一步用车充值协议》</router-link></small></p>
   </div>
 </div>
 
@@ -86,8 +86,8 @@ export default {
 
   watch: {
     payResult(){
-      this.$loading.close()
-      this.handlePayResult(this.payResult.payResult, this.payResult.message)
+      this.$message.close()
+      this.handlePayResult(this.payResult.isSuccess, this.payResult.message)
     }
   },
 
@@ -100,20 +100,17 @@ export default {
         paymentType: payConfig.paymentType[this.type],
         terminalFlag: ''
       }
-      console.log('====params====', params)
 
       dataService.submitOrder(params.paymentPluginId, params.payerId, params.amount, params.paymentType, params.terminalFlag).then(res => {
         let result = res.data
         let data = result.data.parameters
         if (this.$bridge) {
           let handlerName = params.paymentPluginId == 'alipayMobilePlugin' ? 'jsCallPayZFB' : 'jsCallPayWX'
-          this.$bridge.callHandler(handlerName, data, res => {
-
-          })
-          this.$loading.open('正在进行支付...')
+          this.$bridge.callHandler(handlerName, data)
+          this.$message.alert('正在进行支付...')
         } else {
           this.$toast('支付失败：no bridge')
-          this.$loading.close()
+          this.$message.close()
         }
       })
       return
@@ -222,6 +219,7 @@ export default {
       font-size: 2.668vw;
       margin-top: 3%;
       color: $color-gray-light;
+      text-align: center;
     }
     a {
       color: $color-yellow;

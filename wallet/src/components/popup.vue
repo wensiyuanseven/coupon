@@ -198,7 +198,7 @@ export default {
     }
     .popup-radio-label {
       vertical-align: middle;
-      margin-left: 6px;
+      margin-left: 4px;
       font-size: 14px;
     }
     .popup-radio {
@@ -210,7 +210,7 @@ export default {
         &:checked {
           +.popup-radio-core {
             background-color: $color-popup-blue;
-            border-color: $color-popup-gray;
+            border: none;
           }
         }
         &[disabled]+.popup-radio-core {
@@ -225,8 +225,8 @@ export default {
         border-radius: 100%;
         border: 1px solid #ccc;
         position: relative;
-        width: 8px;
-        height: 8px;
+        width: 10px;
+        height: 10px;
         vertical-align: middle;
         transition: background .1s ease-out;
       }

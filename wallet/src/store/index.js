@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: process.env.NODE_ENV === 'production' ? null : {
+      // id: 87260 
       id: 87102 // 我的
         // id: 66048 // 好的
         // id: 123
@@ -32,8 +33,8 @@ export default new Vuex.Store({
       state.refundData.money = data.money
       state.refundData.type = data.type
     },
-    setRefundReason: function(state, reason) {
-      state.refundData.reason = reason
+    setRefundReason: function(state, reasons) {
+      state.refundData.reasons = reasons
     },
     setPayResult: function(state, data) {
       state.payResult = data
