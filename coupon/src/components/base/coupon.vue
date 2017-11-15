@@ -3,16 +3,16 @@
     <div class="coupon-block" v-for="(item, index) in coupondata" :key="index"  :class="[bgimg]">
       <div class="coupon-money">
         <div>
-          <span :style="fontcolor" v-if="item.coupons_type==='1'" class="coupons-money">￥</span>
-          <span :style="fontcolor" v-if="item.coupons_type==='1'">{{item.coupons_money| money }}</span>
-          <span :style="fontcolor" v-else>{{item.coupons_discount/10+'折'}} </span>
+          <span v-if="item.coupons_type==='1'" class="coupons-money" :class="{fontcolor:coupontype===2||3}">￥</span>
+          <span  v-if="item.coupons_type==='1'" :class="{fontcolor:coupontype===2||3}">{{item.coupons_money| money }}</span>
+          <span  v-else :class="{fontcolor:coupontype===2||3}">{{item.coupons_discount/10+'折'}} </span>
         </div>
-        <span :style="fontcolor" class="coupons-use-money" >{{item.qualification}}</span>
+        <span class="coupons-use-money" :class="{fontcolor:coupontype===2||3}">{{item.qualification}}</span>
       </div>
       <div class="coupon-rule">
-        <span :style="fontcolor">{{item.coupons_name}}</span>
-        <span :style="fontcolor" class="describe">{{item.coupons_detail}}</span>
-        <span :style="fontcolor" v-if="item.start_date">有效期：{{item.start_date+'至'+item.end_date}}</span>
+        <span  class="coupons-name" :class="{fontcolor:coupontype===2||3}">{{item.coupons_name}}</span>
+        <span   class="coupons-detail" :class="{fontcolor:coupontype===2||3}">{{item.coupons_detail}}</span>
+        <span  class="coupons-data" v-if="item.start_date" :class="{fontcolor:coupontype===2||3}">有效期：{{item.start_date+'至'+item.end_date}}</span>
       </div>
     </div>
   </div>
@@ -33,30 +33,25 @@ export default {
     // 优惠券数据
     coupondata: {
       type: Array,
-      default() {
+      default () {
         return [];
       }
     }
   },
-  data() {
+  data () {
     return {
       currentbg: null, //点击的背景
       allLoaded: false
     };
   },
-  mounted() {
-    setTimeout(()=>{
-
-    },20)
-  },
   computed: {
     // 优惠券的背景
-    bgimg() {
+    bgimg () {
       return `bgimg-${this.coupontype}`;
     }
   },
   filters: {
-   money(value) {
+    money (value) {
       return value.split('.')[0]
     }
   }
@@ -66,14 +61,14 @@ export default {
 <style lang="scss" scoped>
 // 未使用背景
 .bgimg-1 {
-  background: url("./../../assets/img/bg-noshadow@2x.png"); 
-} 
+  background: url("./../../assets/img/bg-noshadow@2x.png");
+}
 
 // 已经使用 已经失效 背景
 .bgimg-2 {
   // 阴影问题
   background: url("./../../assets/img/bg-brace@2x.png");
-    // transform: translate3d(0, 0, 0);
+  // transform: translate3d(0, 0, 0);
 }
 #coupon {
   height: 100%;
@@ -137,7 +132,6 @@ export default {
     span {
       font-family: PingFangSC-Regular;
       font-size: 3.2vw;
-      color: #ffffff;
       padding-top: 1.007vw; // 需要指定宽度
       width: 61vw;
       word-break: keep-all;
@@ -145,25 +139,32 @@ export default {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      &:first-child {
-        font-family: PingFangSC-Medium;
-        font-size: 4.8vw;
-        color: #3d3d3d;
-        font-weight: 600;
-      }
-      &:last-child {
-        color: #3d3d3d;
-        overflow: visible;
-        text-overflow: clip;
-      }
     }
-    .describe {
+    // 优惠券名字
+    .coupons-name {
+      font-family: PingFangSC-Medium;
+      font-size: 4.8vw;
+      color: #3d3d3d;
+      font-weight: 600;
+    }
+    // 描述
+    .coupons-detail {
       overflow: hidden !important;
       text-overflow: ellipsis !important;
+      color: #ffffff !important;
+    }
+    // 时间
+    .coupons-data {
+      color: #3d3d3d;
+      overflow: visible;
+      text-overflow: clip;
     }
   }
 }
 .yang {
   font-size: 5.0838vw !important;
+}
+.fontcolor {
+  color: #d6d6d6 !important;
 }
 </style>

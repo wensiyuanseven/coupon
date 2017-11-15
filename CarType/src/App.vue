@@ -90,10 +90,22 @@
                       <el-button size="mini"  @click="editList()">编辑</el-button>
                       <el-button  size="mini"  type="danger" @click="deleteItem()">删除</el-button>
                       <el-button  size="mini"  type="success" @click="detailsItem()">详情</el-button>
-</template>
+       </template>
       </el-table-column>
     </el-table>
     <!-- 表格结束 -->
+    <!-- 日期开始 -->
+    
+    <div class="block">
+      <span>添加日期范围</span>
+    <el-date-picker
+      v-model="dataValue"
+      type="date"
+      placeholder="选择日期"
+      :picker-options="pickerOptions">
+    </el-date-picker>
+  </div>
+    <!-- 日期结束 -->
     <!-- 车型详情对话框 开始-->
      <el-dialog :visible.sync='detailsItemVisible' title='车型详情' width='40%' top='3vh' :close-on-click-modal="false" >
        <div class="content-table">
@@ -212,6 +224,12 @@ export default {
       }
     }
     return {
+      pickerOptions: {
+        disabledDate (time) {
+          return time.getTime() > Date.now();
+        }
+      },
+      dataValue: '', // 日期选择器
       dialogVisible: false, // isible 添加提示状态
       detailsItemVisible: false,
       rules: {
